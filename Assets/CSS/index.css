@@ -1,0 +1,89 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+  }
+  
+  
+  .main-div, .loggedin-div {
+    display: none;
+    float: right;
+  }
+ 
+ 
+  .row {
+    font-family: 'Nunito', sans-serif;
+  }
+  
+
+  header {
+    background-image: url("Assets/Images/head.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+      }
+
+.form-group row {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+/*User Login/Create an Account*/
+h2 {
+    
+}
+
+tName {
+    float: left;
+}
+
+
+
+.navbar-default {
+	background-color:transparent !important;
+	border-color:transparent;
+	background-image:none;
+	box-shadow:none;	
+}
+
+.navbar-default {
+	background-color:transparent !important;
+	border-color:transparent;
+	background-image:none;
+	box-shadow:none;	
+}
+
+.navbad-brand {
+    font-family: 'Special Elite', cursive;
+}
+
+#left, #right {
+	background: #a5ebff2c;
+	position: fixed;
+}
+
+#left, #right {
+    top: 0; 
+    bottom: 0;
+	width: 150px;
+}
+
+#left { 
+    left: 0; 
+}
+
+#right { 
+    right: 0;
+}
+
+.weather {
+    float: left;
+}
+
+h5 {
+    font-weight: bolder;
+}
+.panel-body {
+    background-color: white;
+}

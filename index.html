@@ -1,12 +1,295 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <title>Firebase Login</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="Assets/CSS/index.css">
+  <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Cabin+Sketch|Cutive+Mono|Trochut" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!--CSS-->
+  <style type="text/css">
+    body {
+      background-image: url("Assets/Images/background.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .navbar-brand {
+      font-family: 'Cabin Sketch', cursive;
+      font-size: 600%;
+      font-weight: 550;
+
+    }
+
+    button,
+    h5 {
+      font-family: 'Cutive Mono', monospace;
+    }
+
+    h5 {
+      font-weight: bolder;
+    }
+
+    h3 {
+      font-family: 'Trochut', cursive;
+      font-size: 400%;
+    }
+  </style>
+
 </head>
+
 <body>
+
+  <div id="left"></div>
+  <div id="right"></div>
+
+
+  <br>
+
+  <!--NAV BAR-->
+  <nav class="navbar navbar-default" style="border: none;">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#" style="color: rgba(24, 49, 124, 0.473)">Anchorman</a>
+      </div>
+    </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+
+  <div class="container">
+
+    <!--WEATHER-->
+    <br>
+    <div class="card card-default" style="background-color: rgba(255, 255, 255, 0.445)">
+      <div class="card-body">
+        <div id="weather">
+          <input id="city" />
+          <button id="getWeather">Get Weather</button>
+
+          <div id="showMeWeather"></div>
+          <script type="text/javascript">
+            $(document).ready(function () {
+              $("#getWeather").click(function () {
+                var city = $("#city").val();
+                var key = 'a754dad914388661dec8a8705b9a988a';
+
+                $.ajax({
+                  url: 'http://api.openweathermap.org/data/2.5/weather',
+                  dataType: 'json',
+                  type: 'GET',
+                  data: { q: city, appid: key, units: 'metric' },
+
+                  success: function (data) {
+                    var wf = '';
+                    $.each(data.weather, function (index, val) {
+                      wf += '<p><b>' + data.name + "</b></p>" +
+                        data.main.temp + '&deg;C ' + ' | ' +
+                        val.description
+                    });
+                    $("#showMeWeather").html(wf);
+                  }
+
+                });
+              });
+            });
+
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <!--LOG IN-->
+    <br>
+    <div class="card card-default" style="background-color: rgba(255, 255, 255, 0.445)">
+      <div id="login_div" class="main-div">
+        <div class="card-heading">
+          <h2 class="card-title">User Login/Create an Account</h2>
+        </div>
+        <div class="card-body">
+          <input type="email" placeholder="Email..." id="email_field" />
+          <input type="password" placeholder="Password..." id="password_field" />
+          <br>
+          <br>
+          <button onclick="login()">Login to Account</button>
+          <button onclick="signup()">Create an Account</button>
+        </div>
+      </div>
+    </div>
+
+        <!--LOCATION-->
+        <div id="search-entry">
+            <div class="container">
+              <h2 id="text-center">Enter Location: </h2>
+              <form id="location-form">
+                <input type="text" id="location-input" class="form-control form-control-lg">
+                <br>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              </form>
+              <div class="card-block" id="formatted-address"></div>
+            </div>
+      
+          </div>
+
+
+    <!--WELCOME MESSAGE-->
+    <br>
+    <div class="card card-default" style="background-color: rgba(255, 255, 255, 0.445)">
+      <div id="user_div" class="loggedin-div">
+        <div class="card-heading">
+          <h2 class="card-title">Welcome</h2>
+        </div>
+        <div class="card-body">
+          <p id="user_para">Welcome to Firebase web login Example. You're currently logged in.</p>
+          <button onclick="logout()">Logout</button>
+          <br>
+        </div>
+      </div>
+    </div>
+    <div class="card-block" id="formatted-address"></div>
+    <!--LOCATION-->
     
+
+    <script>
+      // Call Geocode
+      //geocode();
+
+      // Get location form
+      var locationForm = document.getElementById('location-form');
+
+      // Listen for submiot
+      locationForm.addEventListener('submit', geocode);
+
+      function geocode(e) {
+        // Prevent actual submit
+        e.preventDefault();
+
+        var location = document.getElementById('location-input').value;
+
+        axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+          params: {
+            address: location,
+            key: 'AIzaSyDihNXPkmOb53Zr9HVHd495uA7LqiWs5a0'
+          }
+        })
+          .then(function (response) {
+            // Log full response
+            console.log(response);
+
+            // Formatted Address
+            var formattedAddress = response.data.results[0].formatted_address;
+            var formattedAddressOutput = `
+                  <ul class="list-group">
+                    <li class="list-group-item">${formattedAddress}</li>
+                  </ul>
+                `;
+
+            // Output to app
+            document.getElementById('formatted-address').innerHTML = formattedAddressOutput;
+            document.getElementById('location-selection').innerHTML = formattedAddressOutput;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    </script>
+
+
+    <!--ADDING NEWS-->
+    <br>
+    <div id="entry_div">
+      <div class="panel panel-defult">
+        <div class="panel-heading" style="background-color:rgba(0, 139, 139, 0.685)">
+          <h3 class="panel-title" style="color: lavender"><strong>POST</strong></h3>
+        </div>
+        <div class="panel-body">
+
+
+          <!-- Sign-up Form (note the various input "types")-->
+          <form role="form">
+            <div class="form-group row">
+              <label for="name-input">User:</label>
+              <input class="form-control" id="name-input" type="text">
+            </div>
+            <div class="form-group row">
+              <label for="time-input">Time:</label>
+              <input class="form-control" id="time-input" type="number">
+            </div>
+           
+            <div class="form-group row">
+              <label for="text-input">Message</label>
+              <input class="form-control" id="text-input" type="text">
+            </div>
+            <button class="btn btn-default" id="add" type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <!--FEED-->
+    <br>
+    <div class="row_div">
+      <div class="col-lg-12">
+        <div class="panel panel-defult" style="border-style: hidden;">
+          <div class="panel-heading" style="background-color:rgba(0, 139, 139, 0.685)">
+            <h3 class="panel-title" style="color: lavender"><strong>NEWS</strong></h3>
+          </div>
+          <div class="panel-body">
+            <table class="table table-hover" id='train-table'>
+              <thead>
+                <tr>
+                  <th scope="col">User</th>
+                  <th scope="col">Time</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">News</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+        <!--API-->
+        <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+
+        <script>
+          var config = {
+            apiKey: "AIzaSyCVPwsl_RJoj8MVgfrw3WV9gKdkWBOITVw",
+            authDomain: "legdemo1.firebaseapp.com",
+            databaseURL: "https://legdemo1.firebaseio.com",
+            projectId: "legdemo1",
+            storageBucket: "legdemo1.appspot.com",
+            messagingSenderId: "1078264037831"
+
+          };
+          firebase.initializeApp(config);
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="Assets/JavaScript/script.js"></script>
+
+
+      </div>
+
+
 </body>
+
 </html>
